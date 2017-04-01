@@ -1,7 +1,10 @@
 import io.github.bonigarcia.wdm.ChromeDriverManager;
+import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 
@@ -25,6 +28,13 @@ public class W3schoolTest {
         W3schoolPage w3schoolPage = new W3schoolPage(driver);
         Select dropDownSelect = new Select(w3schoolPage.dropDown);
         w3schoolPage.selectOptionFromDropdown("Wolski Zajazd", dropDownSelect);
-        Thread.sleep(3000);
+        WebElement cityField = w3schoolPage.waitFluentlyForElementByXpath(w3schoolPage.cityNameFieldXpath);
+        Assert.assertEquals("City name doesn't match", "Warszawa", cityField.getText().trim());
+    }
+
+    @AfterClass
+    public static void closeDriver() {
+        driver.close();
+        driver.quit();
     }
 }
