@@ -20,12 +20,19 @@ public class RemaxMainPage {
         PageFactory.initElements(driver, this);
     }
 
-    By region = By.id("region-select");
+    By region = By.className("regionLink");
 
     public void selectLocation(String location) {
+        By province = By.xpath(String.format("//div[@id='regionSelector']//a[.='%s']", location));
         Actions ac = new Actions(driver);
         ac.moveToElement(wait.until(ExpectedConditions.presenceOfElementLocated(region)));
-        ac.perform();
+        ac.click(wait.until(ExpectedConditions.presenceOfElementLocated(province)));
+        ac.build().perform();
+    }
+
+    public void selectPropertyByAddress(String address) {
+        By propertyImightLike = By.xpath(String.format("//dd[@class='propertyAddress' and . ='%s']/../../../dt", address));
+        wait.until(ExpectedConditions.presenceOfElementLocated(propertyImightLike)).click();
     }
 
 

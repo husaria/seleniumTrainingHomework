@@ -27,6 +27,7 @@ public class RemaxTest {
         driver.manage().window().maximize();
         RemaxMainPage remaxMainPage = new RemaxMainPage(driver, wait);
         remaxMainPage.selectLocation("Manitoba");
+        remaxMainPage.selectPropertyByAddress("1521 10th Street");
         Thread.sleep(3000);
     }
 
