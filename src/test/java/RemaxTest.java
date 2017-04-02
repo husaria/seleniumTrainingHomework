@@ -1,5 +1,10 @@
+import io.github.bonigarcia.wdm.ChromeDriverManager;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
+import org.omg.PortableServer.THREAD_POLICY_ID;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
@@ -10,5 +15,24 @@ public class RemaxTest {
     private static WebDriverWait wait;
 
     @BeforeClass
-    public static void initializeWebdriver()
+    public static void initializeWebdriver() {
+        ChromeDriverManager.getInstance().setup();
+        driver = new ChromeDriver();
+        wait = new WebDriverWait(driver, 10);
+    }
+
+    @Test
+    public void checkIfCorrectPropertyIsSelected() throws InterruptedException {
+        driver.get("https://www.remax.ca/");
+        driver.manage().window().maximize();
+        RemaxMainPage remaxMainPage = new RemaxMainPage(driver, wait);
+        remaxMainPage.selectLocation("Manitoba");
+        Thread.sleep(3000);
+    }
+
+    @AfterClass
+    public static void closeDriver() {
+        driver.close();
+        driver.quit();
+    }
 }
