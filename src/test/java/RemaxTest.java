@@ -1,8 +1,8 @@
 import io.github.bonigarcia.wdm.ChromeDriverManager;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.omg.PortableServer.THREAD_POLICY_ID;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -25,10 +25,19 @@ public class RemaxTest {
     public void checkIfCorrectPropertyIsSelected() throws InterruptedException {
         driver.get("https://www.remax.ca/");
         driver.manage().window().maximize();
-        RemaxMainPage remaxMainPage = new RemaxMainPage(driver, wait);
-        remaxMainPage.selectLocation("Manitoba");
-        remaxMainPage.selectPropertyByAddress("1521 10th Street");
-        Thread.sleep(3000);
+        RemaxPage remaxPage = new RemaxPage(driver, wait);
+        String location = "Manitoba";
+        int noOfPropertyOnSlider = 2;
+        remaxPage.selectLocation(location);
+        String addressFromSlider = remaxPage.getAddressOfSelectedProperty(noOfPropertyOnSlider - 1);
+        remaxPage.selectProperty(noOfPropertyOnSlider - 1);
+        String fullAddressOfSelectedProperty = remaxPage.getTheAddressOfPropertyFromHeader();
+        System.out.println(String.format("Address on selection slider: %s", addressFromSlider));
+        System.out.println(String.format("Address on property's page: %s", fullAddressOfSelectedProperty));
+        Assert.assertTrue(
+                "Address on selection page is different than on property's page!",
+                fullAddressOfSelectedProperty.contains(addressFromSlider)
+                );
     }
 
     @AfterClass
